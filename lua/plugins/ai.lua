@@ -1,72 +1,53 @@
 return {
-  -- {
-  --   "olimorris/codecompanion.nvim",
-  --   dependencies = {
-  --     "nvim-lua/plenary.nvim",
-  --     "nvim-treesitter/nvim-treesitter",
-  --     "nvim-telescope/telescope.nvim", -- Optional
-  --     {
-  --       "stevearc/dressing.nvim", -- Optional: Improves the default Neovim UI
-  --       opts = {},
-  --     },
-  --   },
-  --   config = true,
-  -- },
   {
-    "yetone/avante.nvim",
-    event = "VeryLazy",
-    lazy = false,
-    version = "*", -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
-    opts = {
-      provider = "openai",
-      openai = {
-        endpoint = "https://api.openai.com/v1",
-        model = "gpt-4o", -- your desired model (or use gpt-4o, etc.)
-        timeout = 30000, -- timeout in milliseconds
-        temperature = 0, -- adjust if needed
-        max_tokens = 4096,
-        -- reasoning_effort = "high" -- only supported for reasoning models (o1, etc.)
-      },
-    },
-    -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-    build = "make",
-    -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
+    "olimorris/codecompanion.nvim",
     dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-      "stevearc/dressing.nvim",
       "nvim-lua/plenary.nvim",
-      "MunifTanjim/nui.nvim",
-      --- The below dependencies are optional,
-      "echasnovski/mini.pick", -- for file_selector provider mini.pick
-      "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
-      "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
-      "ibhagwan/fzf-lua", -- for file_selector provider fzf
-      "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-      "zbirenbaum/copilot.lua", -- for providers='copilot'
+      "nvim-treesitter/nvim-treesitter",
+      "ravitemer/codecompanion-history.nvim", -- history extension
       {
-        -- support for image pasting
-        "HakonHarnes/img-clip.nvim",
-        event = "VeryLazy",
+        "MeanderingProgrammer/render-markdown.nvim", -- Render markdonw properly on chat
+        ft = { "markdown", "codecompanion" },
+      },
+      {
+        "HakonHarnes/img-clip.nvim", -- Copy image from clipboard into chat using :PasteImage
         opts = {
-          -- recommended settings
-          default = {
-            embed_image_as_base64 = false,
-            prompt_for_file_name = false,
-            drag_and_drop = {
-              insert_mode = true,
+          filetypes = {
+            codecompanion = {
+              prompt_for_file_name = false,
+              template = "[Image]($FILE_PATH)",
+              use_absolute_path = true,
             },
-            -- required for Windows users
-            use_absolute_path = true,
           },
         },
       },
-      {
-        -- Make sure to set this up properly if you have lazy=true
-        "MeanderingProgrammer/render-markdown.nvim",
-        opts = {
-          file_types = { "markdown", "Avante" },
+    },
+    opts = {
+      -- NOTE: The log_level is in `opts.opts`
+      opts = {
+        log_level = "DEBUG", -- or "TRACE"
+      },
+      interactions = {
+        chat = {
+          adapter = {
+            name = "claude_code",
+            model = "opus",
+          },
         },
-        ft = { "markdown", "Avante" },
+      },
+      adapters = {
+        acp = {
+          claude_code = function()
+            return require("codecompanion.adapters").extend("claude_code", {
+              defaults = {
+                model = "opus",
+              },
+              env = {
+                CLAUDE_CODE_OAUTH_TOKEN = os.getenv("CLAUDE_CODE_OAUTH_TOKEN"),
+              },
+            })
+          end,
+        },
       },
     },
   },

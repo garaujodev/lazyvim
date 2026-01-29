@@ -3,6 +3,7 @@
 -- Add any additional keymaps here
 
 local set_keymap = vim.api.nvim_set_keymap
+local wk = require("which-key")
 
 -- Helper function to set key mappings for multiple modes
 local function multiple_set_keymap(modes, lhs, rhs, opts)
@@ -44,12 +45,14 @@ set_keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Find Fi
 set_keymap("n", "<leader><space>", "<cmd>Telescope git_files<cr>", { desc = "Find Git Files (root dir)" })
 
 -- CodeCompanion
--- set_keymap("n", "<C-a>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true })
--- set_keymap("v", "<C-a>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true })
--- set_keymap("n", "<leader>a", "<cmd>CodeCompanionToggle<cr>", { noremap = true, silent = true })
--- set_keymap("v", "<leader>a", "<cmd>CodeCompanionToggle<cr>", { noremap = true, silent = true })
--- set_keymap("v", "ga", "<cmd>CodeCompanionAdd<cr>", { noremap = true, silent = true })
---
+wk.add({
+  { "<leader>a", group = "AI (CodeCompanion)" },
+
+  { "<leader>aa", "<cmd>CodeCompanionChat<cr>", desc = "Chat" },
+  { "<leader>ac", "<cmd>CodeCompanionChat Toogle<cr>", desc = "Chat (open)" }, -- opcional
+  { "<leader>ap", "<cmd>CodeCompanionActions<cr>", desc = "Actions picker" },
+})
+
 -- Live grep
 set_keymap(
   "n",
