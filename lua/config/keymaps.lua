@@ -93,6 +93,8 @@ wk.add({
   { "<leader>gvf", "<cmd>DiffviewFileHistory %<cr>", desc = "Current file history" },
 
   { "<leader>gvr", "<cmd>DiffviewRefresh<cr>", desc = "Refresh Diffview" },
+
+  { "<leader>gt", "<cmd>Gitsigns toggle_signs<cr>", desc = "Toggle Gitsigns" },
 })
 
 -- Live grep
@@ -106,3 +108,26 @@ set_keymap(
 vim.keymap.set("n", "<leader>ws", function()
   require("window-picker").pick_window({})
 end, { desc = "Pick a window" })
+
+-- Spectre (search and replace)
+vim.keymap.set("n", "<leader>sr", function()
+  require("spectre").open()
+end, { desc = "Replace in files (Spectre)" })
+
+-- Elixir extras
+vim.keymap.set("n", "<leader>ed", function()
+  require("elixir-extras").elixir_view_docs({})
+end, { desc = "Elixir View Docs" })
+
+vim.keymap.set("n", "<leader>em", function()
+  require("elixir-extras").elixir_view_docs({ include_mix_libs = true })
+end, { desc = "Elixir View Docs (mix libs)" })
+
+vim.keymap.set("n", "<leader>ec", function()
+  require("elixir-extras").module_complete()
+end, { desc = "Elixir Module Complete" })
+
+-- Find plugin files
+vim.keymap.set("n", "<leader>fp", function()
+  require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root })
+end, { desc = "Find Plugin File" })
