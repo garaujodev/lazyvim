@@ -46,11 +46,53 @@ set_keymap("n", "<leader><space>", "<cmd>Telescope git_files<cr>", { desc = "Fin
 
 -- CodeCompanion
 wk.add({
-  { "<leader>a", group = "AI (CodeCompanion)" },
+  -- Normal mode group
+  { "<leader>a", group = "AI (CodeCompanion)", mode = "n" },
 
+  -- Visual mode group (THIS fixes the label)
+  { "<leader>a", group = "AI (CodeCompanion)", mode = "v" },
+
+  -- Normal mode
   { "<leader>aa", "<cmd>CodeCompanionChat<cr>", desc = "Chat" },
-  { "<leader>ac", "<cmd>CodeCompanionChat Toogle<cr>", desc = "Chat (open)" }, -- opcional
+  { "<leader>ac", "<cmd>CodeCompanionChat Toggle<cr>", desc = "Chat (toggle)" },
   { "<leader>ap", "<cmd>CodeCompanionActions<cr>", desc = "Actions picker" },
+
+  -- Visual mode
+  {
+    "<leader>as",
+    "<cmd>CodeCompanionChat Add<cr>",
+    desc = "Add selection to chat",
+    mode = "v",
+  },
+})
+
+-- CodeCompanion buffer-local mapping to send requests with ENTER key
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "codecompanion",
+  callback = function()
+    -- Map Enter to submit the prompt
+    vim.keymap.set("n", "<CR>", "<cmd>CodeCompanionChat Submit<cr>", { buffer = true, silent = true })
+
+    -- Optional: also allow Enter in insert mode
+    -- vim.keymap.set("i", "<CR>", "<Esc><cmd>CodeCompanionChat Submit<cr>", { buffer = true, silent = true })
+  end,
+})
+
+-- Gitdiff
+wk.add({
+  { "<leader>g", group = "Git" },
+  { "<leader>gv", group = "Diffview" },
+
+  { "<leader>gvo", "<cmd>DiffviewOpen<cr>", desc = "Open Diffview" },
+  { "<leader>gvq", "<cmd>DiffviewClose<cr>", desc = "Close Diffview" },
+
+  { "<leader>gve", "<cmd>DiffviewToggleFiles<cr>", desc = "Toggle files panel" },
+  { "<leader>gvE", "<cmd>DiffviewFocusFiles<cr>", desc = "Focus files panel" },
+
+  { "<leader>gvh", "<cmd>DiffviewFileHistory<cr>", desc = "Repo history" },
+  { "<leader>gvf", "<cmd>DiffviewFileHistory %<cr>", desc = "Current file history" },
+
+  { "<leader>gvr", "<cmd>DiffviewRefresh<cr>", desc = "Refresh Diffview" },
 })
 
 -- Live grep
