@@ -130,3 +130,10 @@ end, { desc = "Elixir Module Complete" })
 vim.keymap.set("n", "<leader>fp", function()
   require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root })
 end, { desc = "Find Plugin File" })
+
+-- Terminal toggle with <C-\>
+vim.keymap.set("n", "<C-\\>", function()
+  Snacks.terminal()
+end, { desc = "Toggle Terminal" })
+
+vim.keymap.set("t", "<C-\\>", "<cmd>close<cr>", { desc = "Hide Terminal" })
