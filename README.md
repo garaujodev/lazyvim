@@ -97,6 +97,11 @@ A personal Neovim configuration built on [LazyVim](https://github.com/LazyVim/La
 | `<C-O>` | Open Neotree in current dir |
 | `<C-e>` | Fill current dir in command mode |
 
+### Terminal
+| Keymap | Action |
+|--------|--------|
+| `<C-\>` | Toggle terminal |
+
 ### Telescope
 | Keymap | Action |
 |--------|--------|
